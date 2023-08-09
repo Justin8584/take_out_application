@@ -32,7 +32,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         LambdaQueryWrapper<Dish> dishQueryWrapper = new LambdaQueryWrapper<>();
         // check if connect with dish
         dishQueryWrapper.eq(Dish::getCategoryId, id);
-        int countDish = dishService.count(dishQueryWrapper);
+        int countDish = (int) dishService.count(dishQueryWrapper);
         if (countDish > 0) {
             // already connect with dish, give Exception
             throw new CustomException("Have connected with Other Dishes, delete Failed ... !!! ");
@@ -41,7 +41,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         LambdaQueryWrapper<Setmeal> setmealQueryWrapper = new LambdaQueryWrapper<>();
         // check if connect with setmeal
         setmealQueryWrapper.eq(Setmeal::getCategoryId, id);
-        int countSetmeal = setmealService.count(setmealQueryWrapper);
+        int countSetmeal = (int) setmealService.count(setmealQueryWrapper);
         if (countSetmeal > 0 ) {
             // already connect with setmeal, give exception
             throw new CustomException("Have connected with Other Setmeals, delete Failed ... !!! ");

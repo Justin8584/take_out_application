@@ -54,7 +54,7 @@ public class SetmealServiceImpl extends ServiceImpl<SetmealMapper, Setmeal> impl
         queryWrapper.in(Setmeal::getId, ids);
         queryWrapper.eq(Setmeal::getStatus, 1);
 
-        int count = this.count(queryWrapper);
+        int count = (int) this.count(queryWrapper);
         // make sure the deletable dish
         if (count > 0) {
             // cannot delete
