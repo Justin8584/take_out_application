@@ -9,6 +9,7 @@ import edu.northeastern.reggie.entity.Setmeal;
 import edu.northeastern.reggie.service.CategoryService;
 import edu.northeastern.reggie.service.SetmealDishService;
 import edu.northeastern.reggie.service.SetmealService;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/setmeal")
 @Slf4j
+@Api(tags = "Meal Combo Controller API")
 public class SetmealController {
 
     @Autowired
@@ -38,6 +40,7 @@ public class SetmealController {
 
     @PostMapping
     @CacheEvict(value = "setmealCache", allEntries = true)
+    @ApiOperation(value = "save for new meal")
     public R<String> save(@RequestBody SetmealDto setmealDto) {
 
         setmealService.saveWithDish(setmealDto);
@@ -49,6 +52,12 @@ public class SetmealController {
      * searching in multiple page
      */
     @GetMapping("/page")
+    @ApiOperation(value = "setmeal page")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page",value = "page number",required = true),
+            @ApiImplicitParam(name = "pageSize",value = "num of record in page",required = true),
+            @ApiImplicitParam(name = "name",value = "name of meal",required = false)
+    })
     public R<Page> page(int page, int pageSize, String name) {
 
         Page<Setmeal> pageInfo = new Page<>(page, pageSize);
@@ -87,6 +96,7 @@ public class SetmealController {
      */
     @DeleteMapping
     @CacheEvict(value = "setmealCache", allEntries = true)
+    @ApiOperation(value = "meal delete")
     public R<String> delete(@RequestParam List<Long> ids) {
 
         setmealService.removeWithDish(ids);
@@ -98,6 +108,7 @@ public class SetmealController {
      */
     @GetMapping("/list")
     @Cacheable(value = "setmealCache", key = "#setmeal.categoryId + '_' + #setmeal.status")
+    @ApiOperation(value = "meal status search")
     public R<List<Setmeal>> list(Setmeal setmeal) {
         LambdaQueryWrapper<Setmeal> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(setmeal.getCategoryId() != null, Setmeal::getCategoryId, setmeal.getCategoryId());
